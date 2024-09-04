@@ -1,0 +1,149 @@
+% Davos logo kleuren
+% luchtblauw: 5EBFED 
+% rotsgrijs: 9D9D9C
+% waterblauw: 0077BA
+% bodemgrijs: 373736
+
+\newcommand{\colorTitle}{373736}            % title block main color
+\newcommand{\colorTitleGradient}{5EBFED}    % title block gradient color
+\newcommand{\colorBlockTitle}{5EBFED}       % color of block title
+\newcommand{\colorBlock}{C9F1FF}          % color of blocks
+% \newcommand{\colorBlock}{F5D491}            % color of blocks
+\newcommand{\colorBlockTitleText}{FFFFFF}   % color of block title text
+
+% new color definitions for Desert theme
+\definecolorpalette{GrayOrangeBlue}{
+    \definecolor{colorOne}{HTML}{\colorTitle} %bovenkant
+    \definecolor{colorTwo}{HTML}{\colorBlock} %tekstvakken
+    \definecolor{colorThree}{HTML}{\colorBlockTitle} %tekstkoppen
+}
+
+\definecolor{gradientcolor}{HTML}{\colorTitleGradient} % bottom color for title block and top color for lower block
+
+% Remove gradient in title block
+\definetitlestyle{VerticalShading}{
+	width=\paperwidth, roundedcorners=0, linewidth=0pt, innersep=1.5cm,
+	titletotopverticalspace=0mm, titletoblockverticalspace=20mm,
+	titlegraphictotitledistance=10pt, titletextscale=1
+}{
+   \draw[draw=none, bottom color=gradientcolor, top color=colorOne]%
+   (\titleposleft,\titleposbottom) rectangle (\titleposright,\titlepostop);
+}
+% remove gradient in bottom (modify top color=...)
+\definebackgroundstyle{BottomVerticalGradation}{
+	\draw[draw=none, line width=0pt, bottom color=colorOne, 
+	    top color=gradientcolor] (bottomleft) rectangle ($(bottomleft)+(\textwidth,3)$); 
+}
+
+% remove gradient in text block titles (modify right color=...)
+\defineblockstyle{Slide}{
+	titlewidthscale=1, bodywidthscale=1, titleleft,
+	titleoffsetx=0pt, titleoffsety=0pt, bodyoffsetx=0pt, bodyoffsety=0pt,
+	bodyverticalshift=0pt, roundedcorners=0, linewidth=0pt, titleinnersep=1cm,
+	bodyinnersep=1cm 
+}{
+	\ifBlockHasTitle%
+		\draw[draw=none, left color=colorThree, right color=colorThree]
+		   (blocktitle.south west) rectangle (blocktitle.north east);
+	\fi%
+	\draw[draw=none, fill=blockbodybgcolor] %
+		(blockbody.north west) [rounded corners=30] -- (blockbody.south west) --
+		(blockbody.south east) [rounded corners=0]-- (blockbody.north east) -- cycle;
+}
+% Turn off gray gradient in title and bottom bar
+\definecolorstyle{sampleColorStyle} {
+    \definecolor{colorOne}{HTML}{\colorTitle} %bovenkant
+    \definecolor{colorTwo}{HTML}{\colorBlock} %tekstvakken
+    \definecolor{colorThree}{HTML}{\colorBlockTitle} %tekstkoppen
+    \definecolor{gradientcolor}{HTML}{\colorTitleGradient}
+    \definecolor{blocktitlefgcolor}{HTML}{\colorBlockTitleText}
+}{
+%     % Background Colors
+    \colorlet{backgroundcolor}{white}
+    \colorlet{framecolor}{colorTwo}
+%     % Title Colors
+    \colorlet{titlefgcolor}{white}
+    \colorlet{titlebgcolor}{white}
+%     % Block Colors
+    % \colorlet{blocktitlebgcolor}{white}
+    \colorlet{blocktitlefgcolor}{blocktitlefgcolor}
+    % \colorlet{blockbodybgcolor}{white}
+    % \colorlet{blockbodyfgcolor}{white}
+}
+
+\usetheme{Desert} % uses edited colorpalatte if GrayOrangeBlue
+% \usebackgroundstyle{Filled}
+\usetitlestyle{VerticalShading}  % use Filled and change \colorTitleGradient to avoid gradient?
+\usecolorstyle[colorPalette=GrayOrangeBlue]{sampleColorStyle}
+
+\makeatletter
+\renewcommand\TP@maketitle{
+\vspace{-5mm}
+\centering
+\begin{minipage}[b][][b]{200mm}
+    \includegraphics[width=90mm]{logo/logo_artesia.png}
+    \hfill
+    \includegraphics[width=90mm]{logo/logo_iah.png}
+\end{minipage}
+\hfill
+\begin{minipage}[b][][b]{400mm}
+    \centering
+    \color{titlefgcolor}
+    {\Huge \@title \par}
+    \vspace*{5mm}
+    {\normalsize \@author \par}
+    \vspace*{3mm}
+    {\small	\@institute}
+\end{minipage}
+\hfill
+\begin{minipage}[b][][b]{200mm}
+    \includegraphics[width=60mm]{logo/logo_eawag.png}
+    \hfill
+    \includegraphics[width=60mm]{logo/logo_intera.png}
+    \hfill
+    \includegraphics[width=60mm]{logo/logo_tudelft.png}
+\end{minipage}
+}%
+\makeatother
+
+\makeatletter
+\renewenvironment{tikzfigure}[1][]{
+  \def \rememberparameter{#1}
+  \vspace{6pt}
+  \refstepcounter{figurecounter}
+  \begin{center}
+  }{
+    \ifx\rememberparameter\@empty
+    \else %nothing
+    \\[-10pt]
+    {\small Fig.~\thefigurecounter: \rememberparameter}
+    \fi 
+  \end{center}
+}
+\makeatother
+
+\makeatletter
+\newcounter{tablecounter}
+\newenvironment{tikztable}[1][]{%
+  \def \rememberparameter{#1}%
+  \refstepcounter{tablecounter}%
+  \vspace{10pt}
+  \begin{center}
+    \ifx\rememberparameter\@empty
+    \else %nothing
+    {\small Scenario ~\thetablecounter: \rememberparameter \par\medskip} 
+    \fi
+  }{
+  \end{center}
+}
+\makeatother
+
+\usepackage[square, sort, numbers]{natbib}
+\bibliographystyle{unsrtnat}
+\usepackage{svg}
+\usepackage{booktabs}
+\usepackage{multicol}
+\setlength{\columnsep}{10mm}
+\usepackage[font=small,skip=-2pt]{caption}
+\usepackage{wrapfig}
+\usepackage[table]{xcolor}
